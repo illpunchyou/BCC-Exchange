@@ -15,7 +15,7 @@
     </head>
     <body>
         <!-- Responsive navbar-->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container px-5">
                 <a class="navbar-brand" href="#!">Start Bootstrap</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
@@ -29,8 +29,8 @@
                 </div>
             </div>
         </nav>
-        <!-- Header-->
-        <header class="bg-light py-5">
+        <!-- Header-->   
+        <header class="bg-dark py-5">
             <div class="container px-5">
                 <div class="row gx-5 justify-content-center">
                     <div class="col-lg-6">
@@ -45,6 +45,12 @@
                 </div>
             </div>
         </header>
+        <style>
+            header {
+                background: url('assets/Norwegian_Fjord_142957.jpg') no-repeat center center;
+                background-size: cover;
+            }
+        </style>
         <!-- Features section-->
         <section class="py-5 border-bottom" id="features">
             <div class="container px-5 my-5">
@@ -66,7 +72,7 @@
                     <div class="col-lg-4">
                         <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-toggles2"></i></div>
                         <h2 class="h4 fw-bolder">Enabling Sustainable Growth</h2>
-                        <p>With BDC Exchange, sustainable growth is more than a buzzword—it's a reality. By promoting the trade of biodiversity credits, we enable businesses to grow while preserving our planet's precious biodiversity. This approach allows companies to align their growth strategies with global sustainability goals, setting new standards for corporate responsibility and stewardship of our shared environment.</p>
+                        <p>With BDC Exchange, sustainable growth is more than a buzzword — it's a reality. By promoting the trade of biodiversity credits, we enable businesses to grow while preserving our planet's precious biodiversity. This approach allows companies to align their growth strategies with global sustainability goals, setting new standards for corporate responsibility and stewardship of our shared environment.</p>
                         <a class="text-decoration-none" href="#!">
                         </a>
                     </div>
@@ -348,3 +354,39 @@
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     </body>
 </html>
+<!-- Get in Touch Section-->
+<section class="py-5 bg-light">
+    <div class="container px-5 my-5 px-5">
+        <div class="text-center mb-5">
+            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-envelope"></i></div>
+            <h2 class="fw-bolder">Get in touch</h2>
+            <p class="lead mb-0">Please fill out the quick form, and we will be in touch with lightning speed.</p>
+        </div>
+        <form action="https://formspree.io/f/mqkoozey" method="POST">
+            <!-- Name input-->
+            <div class="form-floating mb-3">
+                <input class="form-control" id="name" type="text" name="name" placeholder="John Doe" required>
+                <label for="name">Full Name</label>
+            </div>
+            <!-- Email input-->
+            <div class="form-floating mb-3">
+                <input class="form-control" id="email" type="email" name="_replyto" placeholder="name@example.com" required>
+                <label for="email">Email Address</label>
+            </div>
+            <!-- Company input-->
+            <div class="form-floating mb-3">
+                <input class="form-control" id="company" type="text" name="company" placeholder="OpenAI" required>
+                <label for="company">Company Name</label>
+            </div>
+            <!-- Message input-->
+            <div class="form-floating mb-3">
+                <textarea class="form-control" id="message" name="message" placeholder="Your message" style="height: 10rem" required></textarea>
+                <label for="message">Message</label>
+            </div>
+            <!-- Submit button -->
+            <div class="d-grid">
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</section>
