@@ -1,4 +1,9 @@
-header {
-    background: url('../assets/Norwegian_Fjord_142957.jpg') no-repeat center center;
+.header-image {
+    height: 100%;
+    background: url('../assets/robert-lukeman-_RBcxo9AU-U-unsplash.jpg') no-repeat center;
     background-size: cover;
+}
+
+.text-shadow {
+    text-shadow: 4px 4px 8px #000000;
 }

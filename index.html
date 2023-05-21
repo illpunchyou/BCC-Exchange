@@ -25,10 +25,13 @@
 <!-- Header-->
 <script>
     async function getIp() {
+        const regexExp = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/gi;
         let request = await fetch("https://api.ipify.org/");
         let result = await request.text();
-        console.log(result)
-        return result
+        if (regexExp.test(result)) {
+            return result
+        }
+        return "127.0.0.1"
     }
 
     async function doTrack(link_type) {
@@ -54,7 +57,41 @@
                 console.error(err);
             })
             .finally(() => {
-                document.getElementById("dialogContent").innerHTML = `<p>Thank you for your interest in BDC Exchange.<br>We have seen your interest. More information will follow soon!</p>`
+                document.getElementById("dialogLoading").hidden = true
+                document.getElementById("dialogForm").hidden = false
+            })
+
+    }
+
+    async function sendMessage(event) {
+        event.preventDefault()
+
+        const {Client, Databases, ID} = Appwrite;
+        const client = new Client().setEndpoint('https://app.ktechnologies.de/v1').setProject('6461051161faccda1a93')
+        const databases = new Databases(client);
+
+        const ip = await getIp()
+
+        databases.createDocument(
+            '6461052a454ed55ed88f',
+            '646a55c7732ca43aa4f4',
+            ID.unique(),
+            {
+                "ip": ip,
+                "timestamp": new Date().toISOString(),
+                "fullname": document.getElementById("name").value,
+                "email": document.getElementById("email").value,
+                "company": document.getElementById("company").value,
+                "message": document.getElementById("message").value
+            }
+        ).then((data) => {
+            document.getElementById("sendMessageDialogContent").innerHTML = `Your message has been send. Thank you for contacting us!`
+        })
+            .catch((err) => {
+                document.getElementById("sendMessageDialogContent").innerHTML = `Your message could not be send. Please try again later!`
+            })
+            .finally(() => {
+                document.getElementById("sendMessageDialog").open = true
             })
 
     }
@@ -63,29 +100,40 @@
         const dialog = document.getElementById("learnMoreDialog");
         dialog.open = true;
 
-        document.getElementById("dialogContent").innerHTML = `<div class="spinner-border" role="status"><span class="sr-only"></span></div>`
+        document.getElementById("dialogLoading").hidden = false
+        document.getElementById("dialogForm").hidden = true
         doTrack("learn_more")
     }
 
-    //doTrack("load")
+    if (document.URL.includes("bccexchange.ktechnologies.de")) {
+        doTrack("load")
+    }
 </script>
-<header class="bg-dark py-5">
-    <div class="container px-5">
-        <div class="row gx-5 justify-content-center">
-            <div class="col-lg-6">
-                <div class="text-center my-5">
-                    <h1 class="display-5 fw-bolder text-white mb-2">BDC Exchange</h1>
-                    <p class="lead text-white-50 mb-4">Welcome to BDC Exchange, where business growth and biodiversity
-                        conservation converge through the innovative concept of biodiversity credits.</p>
-                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-                        <dialog id="learnMoreDialog">
-                            <span id="dialogContent"></span>
-                            <form method="dialog">
-                                <button class="btn btn-primary">OK</button>
-                            </form>
-                        </dialog>
-                        <button class="btn btn-outline-light btn-lg px-4" onclick="onLearnMoreClicked()">Learn More
-                        </button>
+<header class="bg-dark">
+    <div class="header-image">
+        <div class="container px-5">
+            <div class="row gx-5 justify-content-center">
+                <div class="col-lg-6">
+                    <div class="text-center my-5"
+                         style="background: radial-gradient(#5d5d5d, rgba(255,255,255,0) 70%);">
+                        <h1 class="display-5 fw-bolder text-white mb-2 text-shadow">BDC Exchange</h1>
+                        <p class="lead text-white fw-bold mb-4 text-shadow">Welcome to BDC Exchange, where business
+                            growth and biodiversity
+                            conservation converge through the innovative concept of biodiversity credits.</p>
+                        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                            <dialog id="learnMoreDialog">
+                                <div id="dialogLoading" class="spinner-border" role="status"><span
+                                        class="sr-only"></span></div>
+                                <div id="dialogForm" hidden="true">
+                                    <p>Thank you for your interest in BDC Exchange.<br>We have seen your interest.
+                                        Please feel free to leave us a message down below!</p>
+                                    <button class="btn btn-primary"
+                                            onclick="document.getElementById('learnMoreDialog').open=false">Close
+                                    </button>
+                                </div>
+                            </dialog>
+                            <button class="btn btn-light btn-lg px-4" onclick="onLearnMoreClicked()">Learn More</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -120,7 +168,8 @@
                 </a>
             </div>
             <div class="col-lg-4">
-                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-bar-chart-line-fill"></i>
+                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i
+                        class="bi bi-bar-chart-line-fill"></i>
                 </div>
                 <h2 class="h4 fw-bolder">Enabling Sustainable Growth</h2>
                 <p>With BDC Exchange, sustainable growth is more than a buzzword—it's a reality. By promoting the trade
@@ -134,47 +183,52 @@
         </div>
     </div>
 </section>
-<!-- Pricing section-->
-<!-- Testimonials section-->
-<section class="py-5 border-bottom">
+<section class="py-5 bg-light">
     <div class="container px-5 my-5 px-5">
         <div class="text-center mb-5">
-            <h2 class="fw-bolder">Customer testimonials</h2>
-            <p class="lead mb-0">Our customers love working with us</p>
+            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-envelope"></i></div>
+            <h2 class="fw-bolder">Get in touch</h2>
+            <p class="lead mb-0">Please fill out the quick form, and we will be in touch with lightning speed.</p>
         </div>
-        <div class="row gx-5 justify-content-center">
-            <div class="col-lg-6">
-                <!-- Testimonial 1-->
-                <div class="card mb-4">
-                    <div class="card-body p-4">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0"><i class="bi bi-chat-right-quote-fill text-primary fs-1"></i>
-                            </div>
-                            <div class="ms-4">
-                                <p class="mb-1">Thank you for putting together such a great product. We loved working
-                                    with you and the whole team, and we will be recommending you to others!</p>
-                                <div class="small text-muted">- Client Name, Location</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Testimonial 2-->
-                <div class="card">
-                    <div class="card-body p-4">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0"><i class="bi bi-chat-right-quote-fill text-primary fs-1"></i>
-                            </div>
-                            <div class="ms-4">
-                                <p class="mb-1">The whole team was a huge help with putting things together for our
-                                    company and brand. We will be hiring them again in the near future for additional
-                                    work!</p>
-                                <div class="small text-muted">- Client Name, Location</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <form id="messageForm">
+            <!-- Name input-->
+            <div class="form-floating mb-3">
+                <input class="form-control" id="name" type="text" name="name" placeholder="John Doe" maxlength="512"
+                       required>
+                <label for="name">Full Name</label>
             </div>
-        </div>
+            <!-- Email input-->
+            <div class="form-floating mb-3">
+                <input class="form-control" id="email" type="email" name="_replyto" placeholder="name@example.com"
+                       maxlength="512" required>
+                <label for="email">Email Address</label>
+            </div>
+            <!-- Company input-->
+            <div class="form-floating mb-3">
+                <input class="form-control" id="company" type="text" name="company" placeholder="OpenAI" maxlength="512"
+                       required>
+                <label for="company">Company Name</label>
+            </div>
+            <!-- Message input-->
+            <div class="form-floating mb-3">
+                <textarea class="form-control" id="message" name="message" placeholder="Your message" maxlength="4096"
+                          style="height: 10rem" required></textarea>
+                <label for="message">Message</label>
+            </div>
+            <!-- Submit button -->
+            <div class="d-grid">
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+        </form>
+        <dialog id="sendMessageDialog">
+            <p id="sendMessageDialogContent"></p>
+            <button class="btn btn-primary" onclick="document.getElementById('sendMessageDialog').open=false">Close
+            </button>
+        </dialog>
+
+        <script>
+            document.getElementById("messageForm").addEventListener("submit", sendMessage);
+        </script>
     </div>
 </section>
 <!-- Footer-->
@@ -186,7 +240,5 @@
 </footer>
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Core theme JS-->
-<script src="js/scripts.js"></script>
 </body>
 </html>
