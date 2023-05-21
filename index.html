@@ -65,6 +65,7 @@
 
     async function sendMessage(event) {
         event.preventDefault()
+        document.getElementById("sendMessageButton").disabled = true
 
         const {Client, Databases, ID} = Appwrite;
         const client = new Client().setEndpoint('https://app.ktechnologies.de/v1').setProject('6461051161faccda1a93')
@@ -87,12 +88,14 @@
         ).then((data) => {
             document.getElementById("sendMessageDialogContent").innerHTML = `Your message has been send. Thank you for contacting us!`
         })
-            .catch((err) => {
-                document.getElementById("sendMessageDialogContent").innerHTML = `Your message could not be send. Please try again later!`
-            })
-            .finally(() => {
-                document.getElementById("sendMessageDialog").open = true
-            })
+        .catch((err) => {
+            document.getElementById("sendMessageDialogContent").innerHTML = `Your message could not be send. Please try again later!`
+        })
+        .finally(() => {
+            document.getElementById("sendMessageDialog").open = true
+            document.getElementById("messageForm").reset()
+            document.getElementById("sendMessageButton").disabled = false
+        })
 
     }
 
@@ -217,7 +220,7 @@
             </div>
             <!-- Submit button -->
             <div class="d-grid">
-                <button class="btn btn-primary" type="submit">Submit</button>
+                <button id="sendMessageButton" class="btn btn-primary" type="submit">Submit</button>
             </div>
         </form>
         <dialog id="sendMessageDialog">
